@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE= "com.example.android.twoactivities.extra.MESSAGE";
@@ -23,6 +24,53 @@ public class MainActivity extends AppCompatActivity {
         mMessageEditText = findViewById(R.id.editText_main);
         mReplyHeadTextView = findViewById(R.id.text_header_reply);
         mReplyTextView = findViewById(R.id.text_message_reply);
+        Log.d(LOG_TAG, "-------");
+        Log.d(LOG_TAG, "onCreate");
+
+        if (savedInstanceState !=null) {
+            boolean isVisible = savedInstanceState.getBoolean("reply_visible");
+            if (isVisible) {
+                mReplyHeadTextView.setVisibility(View.VISIBLE);
+                mReplyTextView.setText(savedInstanceState.getString("reply_text"));
+                mReplyTextView.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Toast.makeText(this,"onStart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(this,"onPause", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this,"onDestroy", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -46,4 +94,15 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivityForResult(intent,TEXT_REQUEST);
     }
-}
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mReplyHeadTextView.getVisibility()==View.VISIBLE) {
+            outState.putBoolean("reply_visible", true);
+            outState.putString("reply_text", mReplyTextView.getText().toString());
+
+
+            }
+        }
+    }
